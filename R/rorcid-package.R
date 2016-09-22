@@ -1,8 +1,5 @@
 #' A programmatic R interface the Orcid.org API.
 #' 
-#' @importFrom methods is
-#' @importFrom stats setNames
-#' @importFrom utils browseURL head
 #' @importFrom httr GET content stop_for_status accept
 #' @importFrom jsonlite fromJSON
 #' @name rorcid-package
@@ -16,4 +13,14 @@ NULL
 #' @name fields
 #' @docType data
 #' @keywords data
+NULL
+
+#' Defunct functions in rorcid
+#'
+#' \itemize{
+#'  \item \code{\link{summary.or_cid}}: Function is gone. Deemed not really 
+#'  that useful, and hard to maintain given other changes in the package.
+#' }
+#'
+#' @name rorcid-defunct
 NULL

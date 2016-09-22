@@ -1,6 +1,6 @@
 ocom <- function(l) Filter(Negate(is.null), l)
 
-orcid_base <- function() "http://pub.orcid.org/v1.2"
+orcid_base <- function() "https://pub.orcid.org/v1.2"
 
 orc_GET <- function(url, args=list(), ...) {
   tt <- GET(url, query = args, accept('application/orcid+json'), ...)
@@ -31,10 +31,10 @@ fuzzydoi <- function(x, fuzzy = FALSE) {
 
 orc_parse <- function(x){
   out <- jsonlite::fromJSON(x, TRUE, flatten = TRUE)
-  obj <- list(found = out$`orcid-search-results`$`num-found`, 
-              data = out$`orcid-search-results`$`orcid-search-result`)
-  obj$data <- setNames(obj$data, gsub("orcid-profile\\.|orcid-profile\\.orcid-bio\\.", "", names(obj$data)))
-  obj
+  df <- tibble::as_data_frame(out$`orcid-search-results`$`orcid-search-result`)
+  names(df) <- gsub("orcid-profile\\.|orcid-profile\\.orcid-bio\\.", "", names(df))
+  attr(df, "found") <- out$`orcid-search-results`$`num-found`
+  df
 }
 
 # From the plyr package

@@ -7,14 +7,14 @@ rorcid
 [![Build status](https://ci.appveyor.com/api/projects/status/29hanha8jfe4uen8/branch/master?svg=true)](https://ci.appveyor.com/project/sckott/rorcid/branch/master)
 [![codecov.io](https://codecov.io/github/ropensci/rorcid/coverage.svg?branch=master)](https://codecov.io/github/ropensci/rorcid?branch=master)
 [![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/rorcid?color=2ED968)](https://github.com/metacran/cranlogs.app)
-[![cran version](http://www.r-pkg.org/badges/version/rorcid)](http://cran.rstudio.com/web/packages/rorcid)
+[![cran version](http://www.r-pkg.org/badges/version/rorcid)](https://cran.r-project.org/package=rorcid)
 
 `rorcid` is an R programmatic interface to the Orcid public API. `rorcid` is not a product developed or distributed by ORCID®.
 
 Orcid API docs:
 
-* http://members.orcid.org/api
-* https://github.com/ORCID/ORCID-Source/wiki/full-api-reference
+* [http://members.orcid.org/api](http://members.orcid.org/api)
+* [https://github.com/ORCID/ORCID-Source/wiki/full-api-reference](https://github.com/ORCID/ORCID-Source/wiki/full-api-reference)
 
 ## Installation
 
@@ -44,73 +44,30 @@ There's a function `as.orcid()` in this package to help coerce an Orcid ID to an
 
 
 ```r
-as.orcid(x="0000-0002-1642-628X")
+as.orcid(x = "0000-0002-1642-628X")
+#> $`0000-0002-1642-628X`
 #> <ORCID> 0000-0002-1642-628X
 #>   Name: Boettiger, Carl
-#>   URL (first): http://www.carlboettiger.info
+#>   URL (first): 
 #>   Country: US
 #>   Keywords: Ecology, Evolution, Regime Shifts, Stochastic Dynamics
 #>   Submission date: 2012-11-01 17:57:23
-```
-
-You by default get the print method above, but you can use `summary()` as well to get more detailed information.
-
-
-```r
-summary( as.orcid(x="0000-0002-1642-628X") )
-#> <ORCID Summary> 0000-0002-1642-628X
-#>   Name: Boettiger, Carl
-#>   URLs:
-#>      carlboettiger.info: http://www.carlboettiger.info
-#>   Country: US
-#>   Keywords: Ecology, Evolution, Regime Shifts, Stochastic Dynamics
-#>   Submission date: 
-#>   Works:
-#>         Tipping points: From patterns to predictions 
-#>         No early warning signals for stochastic transitions: 
-#> Insights from large deviation theory 
-#>         Early warning signals: the charted and uncharted 
-#> territories 
-#>         Data from: No early warning signals for stochastic 
-#> transitions: insights from large deviation theory 
-#>         Data from: Early warning signals and the prosecutor's 
-#> fallacy 
-#>         Treebase: An R package for discovery, access and 
-#> manipulation of online phylogenies 
-#>         The cost of open access [2] 
-#>         Rfishbase: Exploring, manipulating and visualizing 
-#> FishBase data from R 
-#>         Regime shifts in ecology and evolution (PhD Dissertation) 
-#>         Quantifying limits to detection of early warning for 
-#> critical transitions 
-#>         Modeling stabilizing selection: Expanding the 
-#> Ornstein-Uhlenbeck model of adaptive evolution 
-#>         Is your phylogeny informative? Measuring the power of 
-#> comparative methods 
-#>         Early warning signals and the prosecutor's fallacy 
-#>         Data from: Is your phylogeny informative? Measuring the 
-#> power of comparative methods 
-#>         Data from: Fluc­tu­a­tion domains in adap­tive 
-#> evo­lu­tion 
-#>         Fluctuation domains in adaptive evolution 
-#>         The shape, multiplicity, and evolution of superclusters 
-#> in ACDM cosmology
 ```
 
 Or you can pass in many IDs
 
 
 ```r
-lapply(c("0000-0003-1620-1408", "0000-0002-9341-7985"), as.orcid)
-#> [[1]]
+as.orcid(c("0000-0003-1620-1408", "0000-0002-9341-7985"))
+#> $`0000-0003-1620-1408`
 #> <ORCID> 0000-0003-1620-1408
 #>   Name: Johnson, Thomas
 #>   URL (first): 
-#>   Country: 
+#>   Country: US
 #>   Keywords: 
 #>   Submission date: 2012-10-27 10:33:31
 #> 
-#> [[2]]
+#> $`0000-0002-9341-7985`
 #> <ORCID> 0000-0002-9341-7985
 #>   Name: Binfield, Peter
 #>   URL (first): 
@@ -134,76 +91,47 @@ The `works()` function helps get works data from an orcid data object. The outpu
 
 
 ```r
-out <- works(orcid_id("0000-0002-0233-1757"))
-out
+(out <- works(orcid_id("0000-0002-0233-1757")))
 #> <WORKS> 0000-0002-0233-1757
-#>   Count: 3 - First 10
+#>   Count: 6 - First 10
 #> - Individual heterogeneity in mortality mediates long-term persistence of a seasonal microparasite
 #> - METAPOPULATION DYNAMICS OVERRIDE LOCAL LIMITS ON LONG-TERM PARASITE PERSISTENCE
 #> - Soil mediates the interaction of coexisting entomopathogenic nematodes with an insect host
+#> - Presubmission Inquiry for PLOS Biology article on rOpenSci (PBIOLOGY-S-12-05379)
+#> - git can facilitate greater reproducibility and increased transparency in science
+#> - git repository for paper on git and reproducible science
 ```
 
 And you can easily get to the entire data.frame of works details
 
 
 ```r
-head(out$data)
-#>   put-code journal-title short-description       work-type url work-source
-#> 1  5296064            NA                NA JOURNAL_ARTICLE  NA          NA
-#> 2  5296065            NA                NA JOURNAL_ARTICLE  NA          NA
-#> 3  5296066            NA                NA JOURNAL_ARTICLE  NA          NA
-#>   language-code country visibility work-title.subtitle
-#> 1            NA      NA     PUBLIC                  NA
-#> 2            NA      NA     PUBLIC                  NA
-#> 3            NA      NA     PUBLIC                  NA
-#>   work-title.translated-title
-#> 1                          NA
-#> 2                          NA
-#> 3                          NA
-#>                                                                             work-title.title.value
-#> 1 Individual heterogeneity in mortality mediates long-term persistence of a seasonal microparasite
-#> 2                  METAPOPULATION DYNAMICS OVERRIDE LOCAL LIMITS ON LONG-TERM PARASITE PERSISTENCE
-#> 3       Soil mediates the interaction of coexisting entomopathogenic nematodes with an insect host
-#>   work-citation.work-citation-type
-#> 1            FORMATTED_UNSPECIFIED
-#> 2            FORMATTED_UNSPECIFIED
-#> 3            FORMATTED_UNSPECIFIED
-#>                                                                                                                                                                                      work-citation.citation
-#> 1                               Dugaw, C & Ram, K, 2011, 'Individual heterogeneity in mortality mediates long-term persistence of a seasonal microparasite', <i>Oecologia</i>, vol. 27, no. 2, pp. 154-325.
-#> 2                       Ram, K, Preisser, E, Gruner, D & Strong, D, 2008, 'METAPOPULATION DYNAMICS OVERRIDE LOCAL LIMITS ON LONG-TERM PARASITE PERSISTENCE', <i>Ecology</i>, vol. 38, no. 12, pp. 119-3297.
-#> 3 Gruner, D, Ram, K & Strong, D, 2007, 'Soil mediates the interaction of coexisting entomopathogenic nematodes with an insect host', <i>Journal of Invertebrate Pathology</i>, vol. 108, no. 6, pp. 167-19.
-#>   publication-date.media-type publication-date.year.value
-#> 1                          NA                        2011
-#> 2                          NA                        2008
-#> 3                          NA                        2007
-#>   publication-date.month.value publication-date.day.value
-#> 1                           06                         27
-#> 2                           12                       <NA>
-#> 3                           01                       <NA>
-#>   work-external-identifiers.work-external-identifier
-#> 1                     DOI, 10.1007/s00442-010-1844-5
-#> 2                             DOI, 10.1890/08-0228.1
-#> 3                     DOI, 10.1016/j.jip.2006.08.009
-#>   work-external-identifiers.scope work-contributors.contributor
-#> 1                              NA     NA, NA, NA, FIRST, AUTHOR
-#> 2                              NA     NA, NA, NA, FIRST, AUTHOR
-#> 3                              NA     NA, NA, NA, FIRST, AUTHOR
-#>   source.source-client-id source.source-orcid.value
-#> 1                      NA                        NA
-#> 2                      NA                        NA
-#> 3                      NA                        NA
-#>                source.source-orcid.uri source.source-orcid.path
-#> 1 http://orcid.org/0000-0002-0233-1757      0000-0002-0233-1757
-#> 2 http://orcid.org/0000-0002-0233-1757      0000-0002-0233-1757
-#> 3 http://orcid.org/0000-0002-0233-1757      0000-0002-0233-1757
-#>   source.source-orcid.host source.source-name.value
-#> 1                orcid.org              Karthik Ram
-#> 2                orcid.org              Karthik Ram
-#> 3                orcid.org              Karthik Ram
-#>   source.source-date.value created-date.value last-modified-date.value
-#> 1             1.362714e+12       1.362714e+12             1.437088e+12
-#> 2             1.362714e+12       1.362714e+12             1.437088e+12
-#> 3             1.362714e+12       1.362714e+12             1.437088e+12
+out$data
+#> # A tibble: 6 × 30
+#>   `put-code` `journal-title` `short-description`     `work-type`
+#> *      <chr>           <lgl>               <lgl>           <chr>
+#> 1    5296064              NA                  NA JOURNAL_ARTICLE
+#> 2    5296065              NA                  NA JOURNAL_ARTICLE
+#> 3    5296066              NA                  NA JOURNAL_ARTICLE
+#> 4    9012984              NA                  NA JOURNAL_ARTICLE
+#> 5    9012985              NA                  NA JOURNAL_ARTICLE
+#> 6    9012986              NA                  NA JOURNAL_ARTICLE
+#> # ... with 26 more variables: `work-source` <lgl>, `language-code` <lgl>,
+#> #   country <lgl>, visibility <chr>, `work-title.subtitle` <lgl>,
+#> #   `work-title.translated-title` <lgl>, `work-title.title.value` <chr>,
+#> #   `work-citation.work-citation-type` <chr>,
+#> #   `work-citation.citation` <chr>, `publication-date.media-type` <lgl>,
+#> #   `publication-date.year.value` <chr>,
+#> #   `publication-date.month.value` <chr>,
+#> #   `publication-date.day.value` <chr>,
+#> #   `work-external-identifiers.work-external-identifier` <list>,
+#> #   `work-external-identifiers.scope` <lgl>, url.value <chr>,
+#> #   `work-contributors.contributor` <list>,
+#> #   `source.source-client-id` <lgl>, `source.source-orcid.value` <lgl>,
+#> #   `source.source-orcid.uri` <chr>, `source.source-orcid.path` <chr>,
+#> #   `source.source-orcid.host` <chr>, `source.source-name.value` <chr>,
+#> #   `source.source-date.value` <dbl>, `created-date.value` <dbl>,
+#> #   `last-modified-date.value` <dbl>
 ```
 
 ## Search Orcid
@@ -212,81 +140,81 @@ Get a list of names and Orcid IDs matching a name query
 
 
 ```r
-orcid(query="carl boettiger")
-#> <Orcid Search>
-#> Found: 3388
-#> Size: 10 X 36
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.9250884    NA       NA               NA                NA
-#> 2              0.6547679    NA       NA               NA                NA
-#> 3              0.3718410    NA       NA               NA                NA
-#> 4              0.3305628    NA       NA               NA                NA
-#> 5              0.3305628    NA       NA               NA                NA
-#> 6              0.3305628    NA       NA               NA                NA
-#> 7              0.3305628    NA       NA               NA                NA
-#> 8              0.3129017    NA       NA               NA                NA
-#> 9              0.2988593    NA       NA               NA                NA
-#> 10             0.2946455    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), delegation
-#>   (lgl), scope (lgl), personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl),
-#>   external-identifiers.external-identifier (list),
-#>   external-identifiers.visibility (lgl).
+orcid(query = "carl boettiger")
+#> # A tibble: 10 × 36
+#>    `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                    <dbl> <lgl>      <lgl>              <lgl>
+#> 1                0.7664902    NA         NA                 NA
+#> 2                0.6471822    NA         NA                 NA
+#> 3                0.5177457    NA         NA                 NA
+#> 4                0.3637124    NA         NA                 NA
+#> 5                0.3600570    NA         NA                 NA
+#> 6                0.3146512    NA         NA                 NA
+#> 7                0.3146512    NA         NA                 NA
+#> 8                0.3146512    NA         NA                 NA
+#> 9                0.3146512    NA         NA                 NA
+#> 10               0.3146512    NA         NA                 NA
+#> # ... with 32 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   biography.value <chr>, biography.visibility <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>,
+#> #   `external-identifiers.external-identifier` <list>,
+#> #   `external-identifiers.visibility` <chr>
 ```
 
 You can string together many search terms
 
 
 ```r
-orcid(query="johnson cardiology houston")
-#> <Orcid Search>
-#> Found: 27028
-#> Size: 10 X 33
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.4372813    NA       NA               NA                NA
-#> 2              0.4153811    NA       NA               NA                NA
-#> 3              0.3714895    NA       NA               NA                NA
-#> 4              0.3696327    NA       NA               NA                NA
-#> 5              0.3645557    NA       NA               NA                NA
-#> 6              0.3332218    NA       NA               NA                NA
-#> 7              0.3124763    NA       NA               NA                NA
-#> 8              0.3124763    NA       NA               NA                NA
-#> 9              0.3110496    NA       NA               NA                NA
-#> 10             0.3064326    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr),
-#>   researcher-urls (lgl), external-identifiers (lgl), delegation (lgl),
-#>   scope (lgl), personal-details.other-names (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl).
+orcid(query = "johnson cardiology houston")
+#> # A tibble: 10 × 34
+#>    `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                    <dbl> <lgl>      <lgl>              <lgl>
+#> 1                0.4292993    NA         NA                 NA
+#> 2                0.4078736    NA         NA                 NA
+#> 3                0.3646636    NA         NA                 NA
+#> 4                0.3592525    NA         NA                 NA
+#> 5                0.3591200    NA         NA                 NA
+#> 6                0.3260067    NA         NA                 NA
+#> 7                0.3105809    NA         NA                 NA
+#> 8                0.3078171    NA         NA                 NA
+#> 9                0.3078171    NA         NA                 NA
+#> 10               0.3078171    NA         NA                 NA
+#> # ... with 30 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, `external-identifiers` <lgl>,
+#> #   delegation <lgl>, scope <lgl>, `personal-details.credit-name` <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   biography.value <chr>, biography.visibility <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>
 ```
 
 And use boolean operators
@@ -294,41 +222,40 @@ And use boolean operators
 
 ```r
 orcid("johnson AND(caltech OR 'California Institute of Technology')")
-#> <Orcid Search>
-#> Found: 15473
-#> Size: 10 X 36
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.6064259    NA       NA               NA                NA
-#> 2              0.4127287    NA       NA               NA                NA
-#> 3              0.3722699    NA       NA               NA                NA
-#> 4              0.3692747    NA       NA               NA                NA
-#> 5              0.3539956    NA       NA               NA                NA
-#> 6              0.3475673    NA       NA               NA                NA
-#> 7              0.3451672    NA       NA               NA                NA
-#> 8              0.3380194    NA       NA               NA                NA
-#> 9              0.3350665    NA       NA               NA                NA
-#> 10             0.3231154    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), delegation
-#>   (lgl), scope (lgl), personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl),
-#>   external-identifiers.external-identifier (list),
-#>   external-identifiers.visibility (lgl).
+#> # A tibble: 10 × 35
+#>    `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                    <dbl> <lgl>      <lgl>              <lgl>
+#> 1                0.5884975    NA         NA                 NA
+#> 2                0.4010760    NA         NA                 NA
+#> 3                0.3629876    NA         NA                 NA
+#> 4                0.3551019    NA         NA                 NA
+#> 5                0.3551019    NA         NA                 NA
+#> 6                0.3551019    NA         NA                 NA
+#> 7                0.3489844    NA         NA                 NA
+#> 8                0.3334039    NA         NA                 NA
+#> 9                0.3319200    NA         NA                 NA
+#> 10               0.3319200    NA         NA                 NA
+#> # ... with 31 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, `external-identifiers` <lgl>,
+#> #   delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   biography.value <chr>, biography.visibility <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>
 ```
 
 And you can use start and rows arguments to do pagination
@@ -336,27 +263,26 @@ And you can use start and rows arguments to do pagination
 
 ```r
 orcid("johnson cardiology houston", start = 2, rows = 3)
-#> <Orcid Search>
-#> Found: 27028
-#> Size: 3 X 29
-#> 
-#>   relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                   (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1             0.3714895    NA       NA               NA                NA
-#> 2             0.3696327    NA       NA               NA                NA
-#> 3             0.3645557    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr),
-#>   researcher-urls (lgl), contact-details (lgl), keywords (lgl),
-#>   external-identifiers (lgl), delegation (lgl), scope (lgl),
-#>   personal-details.credit-name (lgl), personal-details.other-names (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl).
+#> # A tibble: 3 × 28
+#>   `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                   <dbl> <lgl>      <lgl>              <lgl>
+#> 1               0.3646636    NA         NA                 NA
+#> 2               0.3592525    NA         NA                 NA
+#> 3               0.3591200    NA         NA                 NA
+#> # ... with 24 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, biography <lgl>,
+#> #   `researcher-urls` <lgl>, `contact-details` <lgl>, keywords <lgl>,
+#> #   `external-identifiers` <lgl>, delegation <lgl>, scope <lgl>,
+#> #   `personal-details.credit-name` <lgl>,
+#> #   `personal-details.other-names` <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>
 ```
 
 Search specific fields. here, by text type
@@ -364,40 +290,40 @@ Search specific fields. here, by text type
 
 ```r
 orcid("text:English")
-#> <Orcid Search>
-#> Found: 16117
-#> Size: 10 X 35
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.9140396    NA       NA               NA                NA
-#> 2              0.8142912    NA       NA               NA                NA
-#> 3              0.7786113    NA       NA               NA                NA
-#> 4              0.7786113    NA       NA               NA                NA
-#> 5              0.7538872    NA       NA               NA                NA
-#> 6              0.7538872    NA       NA               NA                NA
-#> 7              0.7538872    NA       NA               NA                NA
-#> 8              0.7538872    NA       NA               NA                NA
-#> 9              0.7538872    NA       NA               NA                NA
-#> 10             0.7538872    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr),
-#>   external-identifiers (lgl), delegation (lgl), scope (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl).
+#> # A tibble: 10 × 35
+#>    `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                    <dbl> <lgl>      <lgl>              <lgl>
+#> 1                1.2265395    NA         NA                 NA
+#> 2                0.9508344    NA         NA                 NA
+#> 3                0.8929747    NA         NA                 NA
+#> 4                0.8068097    NA         NA                 NA
+#> 5                0.7955252    NA         NA                 NA
+#> 6                0.7606675    NA         NA                 NA
+#> 7                0.7606675    NA         NA                 NA
+#> 8                0.7365131    NA         NA                 NA
+#> 9                0.7365131    NA         NA                 NA
+#> 10               0.7365131    NA         NA                 NA
+#> # ... with 31 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, `external-identifiers` <lgl>,
+#> #   delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   biography.value <chr>, biography.visibility <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>
 ```
 
 ## Search by Orcid ID
@@ -423,7 +349,7 @@ Get specific thing, either bibliographic ("bio"), biographical ("works"), profil
 
 
 ```r
-out <- orcid_id(orcid = "0000-0002-9341-7985", profile="works")
+out <- orcid_id(orcid = "0000-0002-9341-7985", profile = "works")
 out$`0000-0002-9341-7985`$`orcid-history`
 #> $`creation-method`
 #> [1] "WEBSITE"
@@ -440,7 +366,7 @@ out$`0000-0002-9341-7985`$`orcid-history`
 #> 
 #> $`last-modified-date`
 #> $`last-modified-date`$value
-#> [1] 1.453659e+12
+#> [1] 1.465944e+12
 #> 
 #> 
 #> $claimed
@@ -540,78 +466,83 @@ Basic search
 
 
 ```r
-orcid_doi(dois="10.1087/20120404")
+orcid_doi(dois = "10.1087/20120404")
 #> [[1]]
-#> <Orcid DOI Search> 10.1087/20120404
-#> Found: 8
-#> Size: 8 X 36
+#> # A tibble: 8 × 36
+#>   `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                   <dbl> <lgl>      <lgl>              <lgl>
+#> 1              14.6023350    NA         NA                 NA
+#> 2               8.2603270    NA         NA                 NA
+#> 3               8.2603270    NA         NA                 NA
+#> 4               7.2277865    NA         NA                 NA
+#> 5               6.3229960    NA         NA                 NA
+#> 6               5.0583970    NA         NA                 NA
+#> 7               2.0650818    NA         NA                 NA
+#> 8               0.9126459    NA         NA                 NA
+#> # ... with 32 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   biography.value <chr>, biography.visibility <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>,
+#> #   `external-identifiers.external-identifier` <list>,
+#> #   `external-identifiers.visibility` <chr>
 #> 
-#>   relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                   (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1             14.390273    NA       NA               NA                NA
-#> 2              7.195137    NA       NA               NA                NA
-#> 3              6.231171    NA       NA               NA                NA
-#> 4              6.105276    NA       NA               NA                NA
-#> 5              5.756109    NA       NA               NA                NA
-#> 6              4.984937    NA       NA               NA                NA
-#> 7              1.798784    NA       NA               NA                NA
-#> 8              1.259149    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), delegation
-#>   (lgl), scope (lgl), personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl),
-#>   external-identifiers.external-identifier (list),
-#>   external-identifiers.visibility (lgl).
+#> attr(,"class")
+#> [1] "orcid_doi"
 ```
 
 This DOI is not a real one, but a partial DOI, then we can fuzzy search
 
 
 ```r
-orcid_doi(dois="10.1087/2", fuzzy=TRUE, rows=5)
+orcid_doi(dois = "10.1087/2", fuzzy = TRUE, rows = 5)
 #> [[1]]
-#> <Orcid DOI Search> 10.1087/2
-#> Found: 252909
-#> Size: 5 X 35
+#> # A tibble: 5 × 34
+#>   `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                   <dbl> <lgl>      <lgl>              <lgl>
+#> 1               0.9109946    NA         NA                 NA
+#> 2               0.7971203    NA         NA                 NA
+#> 3               0.7585498    NA         NA                 NA
+#> 4               0.7205114    NA         NA                 NA
+#> 5               0.6944009    NA         NA                 NA
+#> # ... with 30 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, biography <lgl>,
+#> #   `external-identifiers` <lgl>, delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   keywords.keyword <list>, keywords.visibility <chr>
 #> 
-#>   relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                   (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1             0.9009679    NA       NA               NA                NA
-#> 2             0.7883469    NA       NA               NA                NA
-#> 3             0.7507699    NA       NA               NA                NA
-#> 4             0.7269728    NA       NA               NA                NA
-#> 5             0.7150497    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr),
-#>   external-identifiers (lgl), delegation (lgl), scope (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl).
+#> attr(,"class")
+#> [1] "orcid_doi"
 ```
 
 Function is vectorized, search for many DOIs
@@ -620,149 +551,42 @@ Function is vectorized, search for many DOIs
 ```r
 dois <- c("10.1371/journal.pone.0025995","10.1371/journal.pone.0053712",
        "10.1371/journal.pone.0054608","10.1371/journal.pone.0055937")
-orcid_doi(dois=dois, fuzzy = TRUE)
-#> [[1]]
-#> <Orcid DOI Search> 10.1371/journal.pone.0025995
-#> Found: 38495
-#> Size: 10 X 35
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.2427311    NA       NA               NA                NA
-#> 2              0.1935129    NA       NA               NA                NA
-#> 3              0.1710429    NA       NA               NA                NA
-#> 4              0.1675871    NA       NA               NA                NA
-#> 5              0.1675871    NA       NA               NA                NA
-#> 6              0.1675871    NA       NA               NA                NA
-#> 7              0.1675871    NA       NA               NA                NA
-#> 8              0.1675871    NA       NA               NA                NA
-#> 9              0.1580027    NA       NA               NA                NA
-#> 10             0.1550260    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), keywords
-#>   (lgl), delegation (lgl), scope (lgl), personal-details.given-names.value
-#>   (chr), personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl),
-#>   external-identifiers.external-identifier (list),
-#>   external-identifiers.visibility (lgl).
-#> 
-#> [[2]]
-#> <Orcid DOI Search> 10.1371/journal.pone.0053712
-#> Found: 38495
-#> Size: 10 X 35
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.3215808    NA       NA               NA                NA
-#> 2              0.1935129    NA       NA               NA                NA
-#> 3              0.1710429    NA       NA               NA                NA
-#> 4              0.1675871    NA       NA               NA                NA
-#> 5              0.1675871    NA       NA               NA                NA
-#> 6              0.1675871    NA       NA               NA                NA
-#> 7              0.1675871    NA       NA               NA                NA
-#> 8              0.1675871    NA       NA               NA                NA
-#> 9              0.1580027    NA       NA               NA                NA
-#> 10             0.1550260    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr),
-#>   external-identifiers (lgl), delegation (lgl), scope (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl), keywords.keyword
-#>   (list), keywords.visibility (lgl).
-#> 
-#> [[3]]
-#> <Orcid DOI Search> 10.1371/journal.pone.0054608
-#> Found: 38495
-#> Size: 10 X 34
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.1863107    NA       NA               NA                NA
-#> 2              0.1646769    NA       NA               NA                NA
-#> 3              0.1613498    NA       NA               NA                NA
-#> 4              0.1613498    NA       NA               NA                NA
-#> 5              0.1613498    NA       NA               NA                NA
-#> 6              0.1613498    NA       NA               NA                NA
-#> 7              0.1613498    NA       NA               NA                NA
-#> 8              0.1521221    NA       NA               NA                NA
-#> 9              0.1492562    NA       NA               NA                NA
-#> 10             0.1397330    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), keywords
-#>   (lgl), external-identifiers (lgl), delegation (lgl), scope (lgl),
-#>   personal-details.given-names.value (chr),
-#>   personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl).
-#> 
-#> [[4]]
-#> <Orcid DOI Search> 10.1371/journal.pone.0055937
-#> Found: 38495
-#> Size: 10 X 35
-#> 
-#>    relevancy-score.value orcid orcid-id orcid-deprecated orcid-preferences
-#>                    (dbl) (lgl)    (lgl)            (lgl)             (lgl)
-#> 1              0.1979634    NA       NA               NA                NA
-#> 2              0.1749766    NA       NA               NA                NA
-#> 3              0.1714413    NA       NA               NA                NA
-#> 4              0.1714413    NA       NA               NA                NA
-#> 5              0.1714413    NA       NA               NA                NA
-#> 6              0.1714413    NA       NA               NA                NA
-#> 7              0.1714413    NA       NA               NA                NA
-#> 8              0.1616364    NA       NA               NA                NA
-#> 9              0.1585914    NA       NA               NA                NA
-#> 10             0.1500076    NA       NA               NA                NA
-#> Variables not shown: orcid-history (lgl), orcid-activities (lgl),
-#>   orcid-internal (lgl), type (lgl), group-type (lgl), client-type (lgl),
-#>   orcid-identifier.value (lgl), orcid-identifier.uri (chr),
-#>   orcid-identifier.path (chr), orcid-identifier.host (chr), keywords
-#>   (lgl), delegation (lgl), scope (lgl), personal-details.given-names.value
-#>   (chr), personal-details.given-names.visibility (lgl),
-#>   personal-details.family-name.value (chr),
-#>   personal-details.family-name.visibility (lgl),
-#>   personal-details.credit-name.value (chr),
-#>   personal-details.credit-name.visibility (lgl),
-#>   personal-details.other-names.other-name (list),
-#>   personal-details.other-names.visibility (lgl), biography.value (chr),
-#>   biography.visibility (lgl), researcher-urls.researcher-url (list),
-#>   researcher-urls.visibility (lgl), contact-details.email (list),
-#>   contact-details.address.country.value (chr),
-#>   contact-details.address.country.visibility (lgl),
-#>   external-identifiers.external-identifier (list),
-#>   external-identifiers.visibility (lgl).
+res <- orcid_doi(dois = dois, fuzzy = TRUE)
+res[[1]]
+#> # A tibble: 10 × 34
+#>    `relevancy-score.value` orcid `orcid-id` `orcid-deprecated`
+#> *                    <dbl> <lgl>      <lgl>              <lgl>
+#> 1                0.2332562    NA         NA                 NA
+#> 2                0.1862045    NA         NA                 NA
+#> 3                0.1645832    NA         NA                 NA
+#> 4                0.1612579    NA         NA                 NA
+#> 5                0.1612579    NA         NA                 NA
+#> 6                0.1612579    NA         NA                 NA
+#> 7                0.1612579    NA         NA                 NA
+#> 8                0.1612579    NA         NA                 NA
+#> 9                0.1612579    NA         NA                 NA
+#> 10               0.1612579    NA         NA                 NA
+#> # ... with 30 more variables: `orcid-preferences` <lgl>,
+#> #   `orcid-history` <lgl>, `orcid-activities` <lgl>,
+#> #   `orcid-internal` <lgl>, type <lgl>, `group-type` <lgl>,
+#> #   `client-type` <lgl>, `orcid-identifier.value` <lgl>,
+#> #   `orcid-identifier.uri` <chr>, `orcid-identifier.path` <chr>,
+#> #   `orcid-identifier.host` <chr>, biography <lgl>, keywords <lgl>,
+#> #   delegation <lgl>, scope <lgl>,
+#> #   `personal-details.given-names.value` <chr>,
+#> #   `personal-details.given-names.visibility` <chr>,
+#> #   `personal-details.family-name.value` <chr>,
+#> #   `personal-details.family-name.visibility` <chr>,
+#> #   `personal-details.credit-name.value` <chr>,
+#> #   `personal-details.credit-name.visibility` <chr>,
+#> #   `personal-details.other-names.other-name` <list>,
+#> #   `personal-details.other-names.visibility` <chr>,
+#> #   `researcher-urls.researcher-url` <list>,
+#> #   `researcher-urls.visibility` <chr>, `contact-details.email` <list>,
+#> #   `contact-details.address.country.value` <chr>,
+#> #   `contact-details.address.country.visibility` <chr>,
+#> #   `external-identifiers.external-identifier` <list>,
+#> #   `external-identifiers.visibility` <chr>
 ```
 
 ## Meta
