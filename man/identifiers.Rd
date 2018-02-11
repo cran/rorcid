@@ -2,11 +2,11 @@
 % Please edit documentation in R/identifiers.R
 \name{identifiers}
 \alias{identifiers}
+\alias{identifiers.works}
 \alias{identifiers.list}
+\alias{identifiers.orcid_id}
 \alias{identifiers.orcid}
 \alias{identifiers.orcid_doi}
-\alias{identifiers.orcid_id}
-\alias{identifiers.works}
 \title{Get identifiers}
 \usage{
 identifiers(x, type = "doi", ...)
@@ -22,21 +22,25 @@ identifiers(x, type = "doi", ...)
 \method{identifiers}{orcid_doi}(x, type = "doi", ...)
 }
 \arguments{
-\item{x}{An object of class works, orcid, orcid_id, orcid_doi, or a list that 
-contains any number of the previous objects.}
+\item{x}{An object of class works, orcid, orcid_id, orcid_doi, or a list
+that contains any number of the previous objects.}
 
-\item{type}{(character) One of doi (default), pmid, pmc, eid, other_id, 
-orcid, scopus, researcherid. The orcid's here are for works, not individuals.}
+\item{type}{(character) One of doi (default), pmid, pmc, eid, other_id,
+orcid, scopus, researcherid. The orcid's here are for works, not
+individuals. This parameter is ignored for classes \code{orcid} and \code{orcid_doi}
+both of which would go down a rabbit hole of getting works for all
+ORCIDs which could take a while.}
 
 \item{...}{Ignored.}
 }
 \value{
-A vector of identifiers, or NULL if none found
+(character) vector of identifiers, or NULL if none found
 }
 \description{
 This function aims to pluck out just identifiers into a vector
-for easy use downstream (e.g., use DOIs to fetch article metadata). You can 
-still manually fetch additional data from outputs of functions in this package.
+for easy use downstream (e.g., use DOIs to fetch article metadata). You
+can still manually fetch additional data from outputs of functions in
+this package.
 }
 \examples{
 \dontrun{
@@ -60,13 +64,14 @@ identifiers(x, "eid")
 
 # Result of call to orcid()
 x <- orcid(query="carl+boettiger")
-identifiers(x, "scopus")
-identifiers(x, "orcid")
-identifiers(x, "researcherid")
+identifiers(x)
 
 # Result of call to orcid_doi()
 x <- orcid_doi(dois="10.1087/20120404", fuzzy=TRUE)
-identifiers(x, "scopus")
+identifiers(x)
 }
 }
-
+\references{
+list of identifiers
+https://pub.qa.orcid.org/v2.0/identifiers?locale=en
+}

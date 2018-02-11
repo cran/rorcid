@@ -9,10 +9,10 @@ as.orcid(x, ...)
 \arguments{
 \item{x}{An ORCID id, passed to \code{print}}
 
-\item{...}{Further args passed on to \code{\link{orcid_id}}}
+\item{...}{Further args passed on to \code{\link[=orcid_id]{orcid_id()}}}
 }
 \value{
-an S3 object of class \code{or_cid}, which pretty prints 
+an S3 object of class \code{or_cid}, which pretty prints
 for brevity
 }
 \description{
@@ -25,8 +25,7 @@ out <- orcid("text:English", rows = 20)
 as.orcid(out$`orcid-identifier.path`[1])
 
 # Passon further args to orcid_id()
-library("httr")
-as.orcid("0000-0002-1642-628X", config=verbose())
+as.orcid("0000-0002-1642-628X", verbose = TRUE)
 
 # Browse to a profile
 # browse(as.orcid("0000-0002-1642-628X"))
@@ -36,8 +35,7 @@ ids <- c("0000-0002-1642-628X", "0000-0002-9341-7985")
 as.orcid(ids)
 
 # many in a list via orcid_id()
-(x <- orcid_id(orcid = ids))
+(x <- lapply(ids, orcid_id))
 as.orcid(x)
 }
 }
-

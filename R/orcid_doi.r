@@ -10,7 +10,7 @@
 #' If FALSE, we stick "digital-object-ids" before the DOI so that the search 
 #' sent to ORCID is for that exact DOI. If TRUE, we use some regex to find 
 #' the DOI.
-#' @param ... Curl options passed on to \code{\link[httr]{GET}}
+#' @param ... Curl options passed on to [crul::HttpClient()]
 #' 		
 #' @examples \dontrun{
 #' orcid_doi(dois="10.1087/20120404", fuzzy=TRUE)
@@ -38,11 +38,12 @@
 
 orcid_doi <- function(dois = NULL, start = NULL, rows = NULL, fuzzy = FALSE, ...){
   bad_dois(dois)
-	getdata <- function(x){
-		args <- ocom(list(q = fuzzydoi(x, fuzzy), start = start, rows = rows))
-		out <- orc_GET_err(file.path(orcid_base(), "search/orcid-bio"), args, ...)
-		structure(orc_parse(out), doi = x)
-	}
-	getdata_safe <- failwith(NULL, getdata)
-	structure(ocom(lapply(dois, getdata_safe)), class = "orcid_doi")
+  getdata <- function(x){
+  	args <- ocom(list(q = fuzzydoi(x, fuzzy), start = start, rows = rows))
+    url <- file.path(orcid_base(), "search")
+    out <- orc_GET(url, args, ctype = ojson, ...)
+  	structure(orc_parse(out), doi = x)
+  }
+  getdata_safe <- failwith(NULL, getdata)
+  structure(ocom(lapply(dois, getdata_safe)), class = "orcid_doi")
 }

@@ -22,3 +22,10 @@ jsonlite::fromJSON(content(req, "text"))
 req <- with_config(gtoken, GET("https://api.github.com/rate_limit"))
 stop_for_status(req)
 content(req)
+
+
+
+req <- GET("https://pub.orcid.org/v1.2/search/orcid-bio?q=digital-object-ids%3A%2210.1016%2Fj.dendro.2014.01.004%22",
+           add_headers(Authorization = paste0('Bearer ', tok$credentials$access_token)),
+           accept('application/orcid+json'),
+           verbose())
