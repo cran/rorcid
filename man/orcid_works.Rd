@@ -10,7 +10,8 @@ orcid_works(orcid, put_code = NULL, format = "application/json", ...)
 \item{orcid}{(character) Orcid identifier(s), of the form
 XXXX-XXXX-XXXX-XXXX. required.}
 
-\item{put_code}{(character/integer) one or more put codes. optional}
+\item{put_code}{(character/integer) one or more put codes. up to
+50. optional}
 
 \item{format}{(character) Name of the content-type format. One of
 "application/vnd.orcid+xml; qs=5", "application/orcid+xml; qs=3",
@@ -21,14 +22,14 @@ XXXX-XXXX-XXXX-XXXX. required.}
 \item{...}{Curl options passed on to \code{\link[crul:HttpClient]{crul::HttpClient()}}}
 }
 \value{
-A list of results for each Orcid ID passed in, with each element 
+A list of results for each Orcid ID passed in, with each element
 named by the Orcid ID
 }
 \description{
 Get works for a person
 }
 \details{
-This function is vectorized, so you can pass in many ORCID's, and 
+This function is vectorized, so you can pass in many ORCID's, and
 there's an element returned for each ORCID you put in.
 }
 \examples{
@@ -36,14 +37,17 @@ there's an element returned for each ORCID you put in.
 # get all works
 res <- orcid_works(orcid = "0000-0002-9341-7985")
 res$`0000-0002-9341-7985`
-res$`0000-0002-9341-7985`$group
-res$`0000-0002-9341-7985`$group$`work-summary`
-res$`0000-0002-9341-7985`$group$`work-summary`[[1]]
-str(res$`0000-0002-9341-7985`$group$`work-summary`[[1]])
+res$`0000-0002-9341-7985`$works
+res$`0000-0002-9341-7985`$works$type
+str(res$`0000-0002-9341-7985`)
 
 # get individual works
-orcid_works(orcid = "0000-0002-9341-7985", 5011717)
-orcid_works(orcid = "0000-0002-9341-7985", put_code = c(5011717, 15536016))
+a <- orcid_works(orcid = "0000-0002-9341-7985", put_code = 5011717)
+a$`0000-0002-9341-7985`
+a$`0000-0002-9341-7985`$works
+b <- orcid_works(orcid = "0000-0002-9341-7985", 
+   put_code = c(5011717, 15536016))
+b$`0000-0002-9341-7985`
 
 # change formats
 orcid_works("0000-0002-9341-7985", 5011717, "application/json")
@@ -52,5 +56,19 @@ orcid_works("0000-0002-9341-7985", 5011717,
   "application/vnd.orcid+xml; qs=5")
 orcid_works("0000-0002-9341-7985", 5011717, 
   "application/vnd.citationstyles.csl+json")
+
+# get citations
+id <- "0000-0001-7678-8656"
+x <- orcid_works(id)
+wks <- orcid_works(id, put_code = x[[1]]$works$`put-code`)
+wks[[1]]$works$`work.citation.citation-value`
+
+## or send many put codes at once, will be split into chunks of 50 each
+id <- "0000-0001-6758-5101"
+z <- orcid_works(id)
+pcodes <- z[[1]]$works$`put-code`
+length(pcodes)
+res <- orcid_works(orcid = id, put_code = pcodes)
+head(res$`0000-0001-6758-5101`$works)
 }
 }

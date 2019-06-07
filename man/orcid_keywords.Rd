@@ -4,13 +4,15 @@
 \alias{orcid_keywords}
 \title{Get education information for a person}
 \usage{
-orcid_keywords(orcid, put_code = NULL, format = "application/json", ...)
+orcid_keywords(orcid, put_code = NULL, format = "application/json",
+  ...)
 }
 \arguments{
 \item{orcid}{(character) Orcid identifier(s), of the form
 XXXX-XXXX-XXXX-XXXX. required.}
 
-\item{put_code}{(character/integer) one or more put codes. optional}
+\item{put_code}{(character/integer) one or more put codes. up to
+50. optional}
 
 \item{format}{(character) Name of the content-type format. One of
 "application/vnd.orcid+xml; qs=5", "application/orcid+xml; qs=3",
@@ -21,14 +23,14 @@ XXXX-XXXX-XXXX-XXXX. required.}
 \item{...}{Curl options passed on to \code{\link[crul:HttpClient]{crul::HttpClient()}}}
 }
 \value{
-A list of results for each Orcid ID passed in, with each element 
+A list of results for each Orcid ID passed in, with each element
 named by the Orcid ID
 }
 \description{
 Get education information for a person
 }
 \details{
-This function is vectorized, so you can pass in many ORCID's, and 
+This function is vectorized, so you can pass in many ORCID's, and
 there's an element returned for each ORCID you put in.
 }
 \examples{

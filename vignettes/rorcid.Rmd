@@ -1,62 +1,16 @@
-rorcid
-======
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Introduction to the rorcid package}
+%\VignetteEncoding{UTF-8}
+-->
 
 
-
-[![Build Status](https://api.travis-ci.org/ropensci/rorcid.png)](https://travis-ci.org/ropensci/rorcid)
-[![Build status](https://ci.appveyor.com/api/projects/status/29hanha8jfe4uen8/branch/master?svg=true)](https://ci.appveyor.com/project/sckott/rorcid/branch/master)
-[![cran checks](https://cranchecks.info/badges/worst/rorcid)](https://cranchecks.info/pkgs/rorcid)
-[![codecov.io](https://codecov.io/github/ropensci/rorcid/coverage.svg?branch=master)](https://codecov.io/github/ropensci/rorcid?branch=master)
-[![rstudio mirror downloads](http://cranlogs.r-pkg.org/badges/rorcid?color=2ED968)](https://github.com/metacran/cranlogs.app)
-[![cran version](http://www.r-pkg.org/badges/version/rorcid)](https://cran.r-project.org/package=rorcid)
 
 `rorcid` is an R programmatic interface to the Orcid public API. `rorcid` is not a product developed or distributed by ORCID®.
 
-Orcid API docs:
-
-* Public API docs: http://members.orcid.org/api
-* Swagger docs: https://pub.orcid.org/v3.0/#/Development_Public_API_v3.0
+Orcid API docs: http://members.orcid.org/api
 
 The package now works with the `v3.0` ORCID API. It's too complicated to allow users to work with different versions of the API, so it's hard-coded to `v3.0`.
-
-## Authentication
-
-There are two ways to authenticate with `rorcid`:
-
-- Use a token as a result of a OAuth authentication process. The token
-is a alphanumeric UUID, e.g. `dc0a6b6b-b4d4-4276-bc89-78c1e9ede56e`. You
-can get this token by running `orcid_auth()`, then storing that key
-(the uuid alone, not the "Bearer " part) either as en environment
-variable in your `.Renviron` file in your home directory, or as an R
-option in your `.Rprofile` file. See `?Startup` for more information.
-Either an environment variable or R option work. If we don't find
-either we do the next option.
-- Interactively login with OAuth. We use a client id and client secret 
-key to ping ORCID.org; at which point you log in with your username/password; 
-then we get back a token (same as the above option). We don't know your 
-username or password, only the token that we get back. We cache that 
-token locally in a hidden file in whatever working directory you're in. 
-If you delete that file, or run the code from a new working directory, 
-then we re-authorize.
-
-We recommend the former option. That is, get a token and store it as an
-environment variable.
-
-If both options above fail, we proceed without using authentication.
-ORCID does not require authentication at this point, but may in the future -
-this prepares you for when that happens :)
-
-See https://members.orcid.org/api/oauth/orcid-scopes for more about ORCID 
-OAuth Scopes.
-
-## Computing environments without browsers
-
-One pitfall is when you are using `rorcid` on a server, and you're ssh'ed
-in, so that there's no way to open a browser to do the OAuth browser
-flow. Similarly for any other situation in which a browser can not be
-opened. In this case, run `orcid_auth()` on another machine in which you do
-have the ability to open a browser, then collect the info that's ouptput
-from `orcid_auth()` and store it as an environment variable (see above).
 
 ## Package API
 
@@ -93,26 +47,28 @@ from `orcid_auth()` and store it as an environment variable (see above).
  - `orcid_other_names`
  - `orcid_works`
 
+
 ## Installation
 
-Stable version
+Install from CRAN
 
 
 ```r
 install.packages("rorcid")
 ```
 
-Development version
+Or install the development version from GitHub
 
 
 ```r
-install.packages("devtools")
 devtools::install_github("ropensci/rorcid")
 ```
 
+Load rorcid
+
 
 ```r
-library('rorcid')
+library("rorcid")
 ```
 
 ## as.orcid
@@ -160,7 +116,7 @@ browse(as.orcid("0000-0002-1642-628X"))
 
 ## Get works
 
-The `works()` function helps get works data from an orcid data object. The output of `works()` is a data.frame
+The `works()` function helps get works data from an orcid data object. The output of `works()` uses a print method to just print citations for each work.
 
 
 ```r
@@ -237,27 +193,6 @@ orcid(query = "johnson cardiology houston")
 #> # … with 90 more rows
 ```
 
-And use boolean operators
-
-
-```r
-orcid("johnson AND(caltech OR 'California Institute of Technology')")
-#> # A tibble: 100 x 3
-#>    `orcid-identifier.uri`         `orcid-identifier.p… `orcid-identifier.h…
-#>  * <chr>                          <chr>                <chr>               
-#>  1 https://orcid.org/0000-0002-0… 0000-0002-0026-2516  orcid.org           
-#>  2 https://orcid.org/0000-0002-7… 0000-0002-7042-5739  orcid.org           
-#>  3 https://orcid.org/0000-0003-0… 0000-0003-0533-6833  orcid.org           
-#>  4 https://orcid.org/0000-0002-3… 0000-0002-3909-2294  orcid.org           
-#>  5 https://orcid.org/0000-0003-4… 0000-0003-4021-2473  orcid.org           
-#>  6 https://orcid.org/0000-0001-6… 0000-0001-6015-8617  orcid.org           
-#>  7 https://orcid.org/0000-0003-0… 0000-0003-0754-8696  orcid.org           
-#>  8 https://orcid.org/0000-0002-7… 0000-0002-7705-5670  orcid.org           
-#>  9 https://orcid.org/0000-0003-4… 0000-0003-4986-4371  orcid.org           
-#> 10 https://orcid.org/0000-0001-5… 0000-0001-5320-7003  orcid.org           
-#> # … with 90 more rows
-```
-
 And you can use start and rows arguments to do pagination
 
 
@@ -271,45 +206,35 @@ orcid("johnson cardiology houston", start = 2, rows = 3)
 #> 3 https://orcid.org/0000-0002-4… 0000-0002-4968-6272   orcid.org
 ```
 
-
 ## Search by Orcid ID
 
 
 ```r
 out <- orcid_id(orcid = "0000-0002-9341-7985")
-out$`0000-0002-9341-7985`$name
-#> $`created-date`
-#> $`created-date`$value
-#> [1] 1.460762e+12
-#> 
-#> 
+out$`0000-0002-9341-7985`$addresses
 #> $`last-modified-date`
 #> $`last-modified-date`$value
-#> [1] 1.460762e+12
+#> [1] 1.465227e+12
 #> 
 #> 
-#> $`given-names`
-#> $`given-names`$value
-#> [1] "Peter"
-#> 
-#> 
-#> $`family-name`
-#> $`family-name`$value
-#> [1] "Binfield"
-#> 
-#> 
-#> $`credit-name`
-#> NULL
-#> 
-#> $source
-#> NULL
-#> 
-#> $visibility
-#> [1] "public"
+#> $address
+#>   visibility                               path put-code display-index
+#> 1     public /0000-0002-9341-7985/address/89515    89515             0
+#>   created-date.value last-modified-date.value source.source-client-id
+#> 1       1.453659e+12             1.465227e+12                      NA
+#>   source.assertion-origin-orcid source.assertion-origin-client-id
+#> 1                            NA                                NA
+#>   source.assertion-origin-name               source.source-orcid.uri
+#> 1                           NA https://orcid.org/0000-0002-9341-7985
+#>   source.source-orcid.path source.source-orcid.host
+#> 1      0000-0002-9341-7985                orcid.org
+#>   source.source-name.value country.value
+#> 1           Peter Binfield            US
 #> 
 #> $path
-#> [1] "0000-0002-9341-7985"
+#> [1] "/0000-0002-9341-7985/address"
 ```
+
 
 ## Search by DOIs
 
@@ -389,11 +314,39 @@ orcid_doi(dois = "10.1087/2", fuzzy = TRUE, rows = 5)
 #> [1] "orcid_doi"
 ```
 
-## Meta
+Function is vectorized, search for many DOIs
 
-* Please [report any issues or bugs](https://github.com/ropensci/rorcid/issues)
-* License: MIT
-* Get citation information for `rorcid` in R doing `citation(package = 'rorcid')`
-* Please note that this project is released with a [Contributor Code of Conduct](https://github.com/ropensci/rorcid/blob/master/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
 
-[![ropensci_footer](https://ropensci.org/public_images/github_footer.png)](https://ropensci.org)
+```r
+dois <- c("10.1371/journal.pone.0025995","10.1371/journal.pone.0053712",
+       "10.1371/journal.pone.0054608","10.1371/journal.pone.0055937")
+res <- orcid_doi(dois = dois, fuzzy = TRUE)
+res[[1]]
+#> # A tibble: 100 x 3
+#>    `orcid-identifier.uri`         `orcid-identifier.p… `orcid-identifier.h…
+#>  * <chr>                          <chr>                <chr>               
+#>  1 https://orcid.org/0000-0002-0… 0000-0002-0051-973X  orcid.org           
+#>  2 https://orcid.org/0000-0001-6… 0000-0001-6577-5526  orcid.org           
+#>  3 https://orcid.org/0000-0001-8… 0000-0001-8887-5095  orcid.org           
+#>  4 https://orcid.org/0000-0002-2… 0000-0002-2355-6760  orcid.org           
+#>  5 https://orcid.org/0000-0001-7… 0000-0001-7669-0325  orcid.org           
+#>  6 https://orcid.org/0000-0003-2… 0000-0003-2574-4201  orcid.org           
+#>  7 https://orcid.org/0000-0003-4… 0000-0003-4683-9648  orcid.org           
+#>  8 https://orcid.org/0000-0002-9… 0000-0002-9358-3983  orcid.org           
+#>  9 https://orcid.org/0000-0002-5… 0000-0002-5634-6145  orcid.org           
+#> 10 https://orcid.org/0000-0001-7… 0000-0001-7563-4495  orcid.org           
+#> # … with 90 more rows
+```
+
+## Get formatted citations for an ORCID ID
+
+One workflow is to get publications associated with an ORCID profile. The following will extract all the works with a DOI, then use the `rcrossref` package to get nicely formatted references for each, and then export them to a bibtex file
+
+
+```r
+my_dois <- rorcid::identifiers(rorcid::works("0000-0002-0337-5997"))
+pubs <- rcrossref::cr_cn(dois = my_dois, format = "bibtex")
+invisible(lapply(pubs, write, "pubs.bib", append=TRUE))
+```
+
+

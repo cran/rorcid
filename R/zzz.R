@@ -1,6 +1,7 @@
 ocom <- function(l) Filter(Negate(is.null), l)
+ocom2 <- function(l) Filter(function(l) !is.null(l) && length(l) > 0, l)
 
-orcid_base <- function() "https://pub.orcid.org/v2.1"
+orcid_base <- function() "https://pub.orcid.org/v3.0"
 
 ojson <- "application/vnd.orcid+json; qs=4"
 
@@ -37,27 +38,23 @@ orcid_ua <- function() {
   paste0(versions, collapse = " ")
 }
 
+`%||%` <- function(x, y) {
+  if (is.null(x) || length(x) == 0) y else x
+}
+
 errs <- function(x) {
   if (x$status_code > 201) {
     xx <- jsonlite::fromJSON(x$parse("UTF-8"))
-    if ("error-code" %in% names(xx)) {
+    if (any(c("error-code", "errorCode") %in% names(xx))) {
       # match by status code
-      fun <- match_err(x$status_code)$new()
-      fun$mssg <- xx$`developer-message`
+      fun <- fauxpas::find_error_class(x$status_code)$new()
+      fun$mssg <- xx$`developer-message` %||% xx$developerMessage
       fun$do_verbose(x)
     } else {
       # if no error message in response, just general stop
       fauxpas::http(x)
     }
   }
-}
-
-match_err <- function(code) {
-  tmp <- paste0("fauxpas::",
-                grep("HTTP*", getNamespaceExports("fauxpas"), value = TRUE))
-  fxns <- lapply(tmp, function(x) eval(parse(text = x)))
-  codes <- vapply(fxns, function(z) z$public_fields$status_code, 1)
-  fxns[[which(code == codes)]]
 }
 
 fuzzydoi <- function(x, fuzzy = FALSE) {
@@ -70,8 +67,7 @@ fuzzydoi <- function(x, fuzzy = FALSE) {
 
 orc_parse <- function(x){
   out <- jsonlite::fromJSON(x, TRUE, flatten = TRUE)
-  df <- tibble::as_data_frame(out$result)
-  # names(df) <- gsub("orcid-profile\\.|orcid-profile\\.orcid-bio\\.", "", names(df))
+  df <- tibble::as_tibble(out$result)
   attr(df, "found") <- out$`num-found`
   return(df)
 }
@@ -105,10 +101,10 @@ pluck <- function(x, name, type) {
 
 pop <- function(x, name) x[ !names(x) %in% name ]
 
-orcid_prof_helper <- function(x, path, ctype = ojson, ...) {
+orcid_prof_helper <- function(x, path, ctype = ojson, parse = TRUE, ...) {
   url2 <- file.path(orcid_base(), x, path)
   out <- orc_GET(url2, ctype = ctype, ...)
-  switch_parser(ctype, out)
+  if (parse) switch_parser(ctype, out) else out
 }
 
 switch_parser <- function(ctype, x) {
@@ -146,8 +142,21 @@ orcid_putcode_helper <- function(path, orcid, put_code, format, ...) {
   }
 }
 
-as_dt <- function(x) {
-  tibble::as_tibble(data.table::setDF(
+as_dt <- function(x, tibble = TRUE) {
+  z <- data.table::setDF(
     data.table::rbindlist(x, use.names = TRUE, fill = TRUE)
-  ))
+  )
+  if (tibble) z <- tibble::as_tibble(z)
+  return(z)
+}
+
+path_picker <- function(put_code, summary, pth_single) {
+  if (!summary) {
+    if (is.null(put_code)) paste0(pth_single, "s") else pth_single
+  } else {
+    if (is.null(put_code)) {
+      stop("if summary == TRUE, must give 1 or more put_code")
+    }
+    file.path(pth_single, "summary")
+  }
 }

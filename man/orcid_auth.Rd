@@ -26,9 +26,11 @@ There are two ways to authorise with \pkg{rorcid}:
 \itemize{
 \item Use a token as a result of a OAuth authentication process. The token
 is a alphanumeric UUID, e.g. \code{dc0a6b6b-b4d4-4276-bc89-78c1e9ede56e}. You
-can get this token by doing xxx. Then store it either as en environment
-variable in your \code{.Renviron} file in your home directory, or as an R
-option in your \code{.Rprofile} file. See \link{Startup} for more information.
+can get this token by running \code{orcid_auth()}, then storing that key
+(the uuid alone, not the "Bearer " part) either as en environment
+variable in your \code{.Renviron} file in your home directory (with the name
+\code{ORCID_TOKEN}), or as an R option in your \code{.Rprofile} file (with the name
+\code{orcid_token}). See \link{Startup} for more information.
 Either an environment variable or R option work. If we don't find
 either we do the next option.
 \item Interactively login with OAuth. This doesn't require any input on
@@ -51,6 +53,16 @@ this prepares you for when that happens :)
 \section{ORCID OAuth Scopes}{
 
 See \url{https://members.orcid.org/api/orcid-scopes} for more
+}
+
+\section{Computing environments without browsers}{
+
+One pitfall is when you are using rorcid on a server, and you're ssh'ed
+in, so that there's no way to open a browser to do the OAuth browser
+flow. Similarly for any other situation in which a browser can not be
+opened. In this case, run \code{orcid_auth()} on another machine in which you do
+have the ability to open a browser, then collect the info that's ouptput
+from \code{orcid_auth()} and store it as an environment variable (see above).
 }
 
 \examples{

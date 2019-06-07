@@ -11,7 +11,8 @@ orcid_peer_reviews(orcid, put_code = NULL, format = "application/json",
 \item{orcid}{(character) Orcid identifier(s), of the form
 XXXX-XXXX-XXXX-XXXX. required.}
 
-\item{put_code}{(character/integer) one or more put codes. optional}
+\item{put_code}{(character/integer) one or more put codes. up to
+50. optional}
 
 \item{format}{(character) Name of the content-type format. One of
 "application/vnd.orcid+xml; qs=5", "application/orcid+xml; qs=3",
@@ -25,28 +26,34 @@ Default: \code{FALSE}}
 \item{...}{Curl options passed on to \code{\link[crul:HttpClient]{crul::HttpClient()}}}
 }
 \value{
-A list of results for each Orcid ID passed in, with each element 
+A list of results for each Orcid ID passed in, with each element
 named by the Orcid ID
 }
 \description{
 Get peer review information for a person
 }
 \details{
-This function is vectorized, so you can pass in many ORCID's, and 
+This function is vectorized, so you can pass in many ORCID's, and
 there's an element returned for each ORCID you put in.
 }
 \examples{
 \dontrun{
 # all peer review data
-res <- orcid_peer_reviews(orcid = "0000-0002-1642-628X")
-res$`0000-0002-1642-628X`
-names(res$`0000-0002-1642-628X`)
-res$`0000-0002-1642-628X`$`group`
+res <- orcid_peer_reviews(orcid = "0000-0001-7678-8656")
+res$`0000-0001-7678-8656`
+names(res$`0000-0001-7678-8656`)
+res$`0000-0001-7678-8656`$`group`
 
 # get individual works
 orcid_peer_reviews("0000-0003-1444-9135", 75565)
 
 # summary
 orcid_peer_reviews("0000-0003-1444-9135", 75565, summary = TRUE)
+
+# get Journal titles via ISSN's provided in results, using the 
+# provided issn_title dataset
+x <- orcid_peer_reviews("0000-0001-7678-8656", put_code = "220419")
+issn <- strsplit(x[[1]]$`review-group-id`, ":")[[1]][[2]]
+issn_title[[issn]]
 }
 }
