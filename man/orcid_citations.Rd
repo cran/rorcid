@@ -4,8 +4,14 @@
 \alias{orcid_citations}
 \title{Get citations}
 \usage{
-orcid_citations(orcid, put_code = NULL, cr_format = "bibtex",
-  cr_style = "apa", cr_locale = "en-US", ...)
+orcid_citations(
+  orcid,
+  put_code = NULL,
+  cr_format = "bibtex",
+  cr_style = "apa",
+  cr_locale = "en-US",
+  ...
+)
 }
 \arguments{
 \item{orcid}{(character) Orcid identifier(s) of the form
@@ -24,7 +30,7 @@ for citeproc-json from Crossref, then converts it into bibtex format
 using \link[handlr:HandlrClient]{handlr::HandlrClient}}
 
 \item{cr_style}{Used in Crossref queries only. A CSL style (for text
-format only). See ‘get_styles()’ for options. Default: apa.
+format only). See 'get_styles()' for options. Default: apa.
 passed to \code{rcrossref::cr_cn}}
 
 \item{cr_locale}{Used in Crossref queries only. Language locale.
@@ -74,7 +80,7 @@ format. DOI.org supports this but not ORCID.
 ## a single put code
 (a <- orcid_citations(orcid = "0000-0002-9341-7985", put_code = 5011717))
 ## many put codes
-(b <- orcid_citations(orcid = "0000-0002-9341-7985", 
+(b <- orcid_citations(orcid = "0000-0002-9341-7985",
    put_code = c(5011717, 15536016)))
 
 # request other formats, Crossref only
